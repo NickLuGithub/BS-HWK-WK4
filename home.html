@@ -5,81 +5,45 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NickLU</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 </head>
 <body>
     <h1>2021 年全球晶圓代工市率-動態生成表格 </h1>
-    <div class="table"></div>
+    
+    <section>
+        <table class="table table-bordered table-striped table-dark col-6" id="container">
+            <!-- <thead></thead>
+            <tbody></tbody>
+            <tfoot></tfoot> -->
+        </table>
+        <div class="chart col-6">
+
+        </div>
+    </section>
+
 
     <script>
         
-        let input_data = {
-                Title: ['排名', '公司', '國家', '市占率%'],
-                Rank: {
-                    1:{
-                        company: '台積電',
-                        country: '台灣',
-                        market: 53.1
-                    },
-                    2:{
-                        company: '三星電子',
-                        country: '韓國',
-                        market: 17.3
-                    },
-                    3:{
-                        company: '聯電',
-                        country: '台灣',
-                        market: 7.2
-                    },
-                    4:{
-                        company: '格羅方德',
-                        country: '美國',
-                        market: 6.1
-                    },
-                    5:{
-                        company: '中芯國際',
-                        country: '中國',
-                        market: 5.3
-                    },
-                    6:{
-                        company: '華虹半導體',
-                        country: '中國',
-                        market: 2.6
-                    },
-                    7:{
-                        company: '力積電',
-                        country: '台灣',
-                        market: 1.8
-                    },
-                    8:{
-                        company: '世界先進',
-                        country: '台灣',
-                        market: 1.4
-                    },
-                    9:{
-                        company: '高塔半導體',
-                        country: '以色列',
-                        market: 1.4
-                    },
-                    10:{
-                        company: '東部高科',
-                        country: '南韓',
-                        market: 1
-                    }
-                }
-            }
-        let display_table;
+        let input_data, display_table;
+        let theadByTable, tbodyByTable, tfootByTable;
 
-        window.onload = function() {
-            
-            // setData(input_data);
-
-            display_table = document.getElementsByClassName("table");
+        window.onload = function() {           
+            GetElement();
+            setData(input_data);
             CreateThead(input_data.Title, display_table);
-            // debugger
+            CreateTbody(input_data.Rank, display_table);
         }
 
-        function setData(data) {
-            data = {
+        function GetElement(){
+            display_table = document.getElementById('container')
+            theadByTable = document.createElement("thead");
+            tbodyByTable = document.createElement("tbody");
+            tfootByTable = document.createElement("tfoot");
+        }
+
+        function setData() {
+            input_data = {
                 Title: ['排名', '公司', '國家', '市占率%'],
                 Rank: {
                     1:{
@@ -140,16 +104,39 @@
             let theadTR = document.createElement("tr");
             data.forEach(item => {
                 let th = document.createElement("th");
-                th.innerText = Text;
+                th.innerText = item;
                 theadTR.append(th);
             });
 
-            let thead;
-            thead.append(theadTR);
-            table.append(thead);
-            container.append(table);
+            theadByTable.append(theadTR);
+            display_table.append(theadByTable);
         }
-        
+
+        function CreateTbody(data, table) {
+            let tbodyTR, th;
+            let values = Object.values(data);
+            let keys = Object.keys(values[0]);
+            let RankList = Object.keys(data);
+
+            values.forEach((value, index) => {
+
+                tbodyTR = document.createElement("tr");
+
+                th = document.createElement("td");
+                th.innerText = RankList[index];
+                tbodyTR.append(th);
+
+                keys.forEach(key => {
+                    th = document.createElement("td");
+                    th.innerText = value[key];
+                    tbodyTR.append(th);
+                })
+
+                tbodyByTable.append(tbodyTR);
+                table.append(tbodyByTable);
+            })
+        }
+
     </script>
 </body>
 </html>
